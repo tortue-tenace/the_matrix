@@ -1,6 +1,3 @@
-"""Loading Programs: pandas/numpy/matplotlib analysis of simulated Matrix
-data, demonstrating pip vs Poetry dependency management.
-"""
 from __future__ import annotations
 
 import importlib
@@ -22,7 +19,6 @@ OUTPUT_PATH = "matrix_analysis.png"
 
 
 def load_module(name: str) -> ModuleType | None:
-    """Dynamically import *name*, returning None if it is unavailable."""
     try:
         return importlib.import_module(name)
     except ImportError:
@@ -32,7 +28,6 @@ def load_module(name: str) -> ModuleType | None:
 def check_dependencies(
     packages: dict[str, str],
 ) -> dict[str, ModuleType | None]:
-    """Report availability/version of each package, one line per entry."""
     modules: dict[str, ModuleType | None] = {}
     for name, purpose in packages.items():
         module = load_module(name)
@@ -46,7 +41,6 @@ def check_dependencies(
 
 
 def print_install_instructions(missing: list[str]) -> None:
-    """Show pip and Poetry install commands for *missing* packages."""
     names = " ".join(missing)
     print("\nWARNING: Missing dependencies detected!")
     print("\nInstall with pip:")
@@ -58,7 +52,6 @@ def print_install_instructions(missing: list[str]) -> None:
 
 
 def compare_pip_poetry(modules: dict[str, ModuleType | None]) -> None:
-    """Print installed package versions and pip vs Poetry differences."""
     print("\nInstalled package versions:")
     for name, module in modules.items():
         version = (
@@ -85,7 +78,6 @@ def compare_pip_poetry(modules: dict[str, ModuleType | None]) -> None:
 
 
 def fetch_matrix_data_from_api(requests_module: ModuleType) -> list[float]:
-    """Fetch sample Matrix data from a public API (best effort)."""
     url = "https://jsonplaceholder.typicode.com/posts"
     response = requests_module.get(url, timeout=5)
     response.raise_for_status()
@@ -94,20 +86,17 @@ def fetch_matrix_data_from_api(requests_module: ModuleType) -> list[float]:
 
 
 def generate_matrix_data(numpy_module: ModuleType, size: int) -> Any:
-    """Simulate Matrix data with numpy - the source of the dataset."""
     generator = numpy_module.random.default_rng(42)
     return generator.normal(loc=0.0, scale=1.0, size=size)
 
 
 def analyze_matrix_data(pandas_module: ModuleType, data: Any) -> Any:
-    """Load the raw values into a DataFrame and derive a running sum."""
     frame = pandas_module.DataFrame({"signal": data})
     frame["cumulative"] = frame["signal"].cumsum()
     return frame
 
 
 def visualize(pyplot_module: ModuleType, frame: Any, path: str) -> None:
-    """Plot the cumulative Matrix signal and save it to *path*."""
     figure, axis = pyplot_module.subplots()
     axis.plot(frame["cumulative"])
     axis.set_title("Matrix Data Analysis")

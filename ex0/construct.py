@@ -1,4 +1,5 @@
-import sys, os
+import sys
+import os
 
 print("\nMATRIX STATUS: You're still plugged in\n")
 if sys.prefix != sys.base_prefix:
